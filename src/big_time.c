@@ -40,9 +40,11 @@ static void load_digit_image_into_slot(int slot_number, int digit_value) {
   s_images[slot_number] = gbitmap_create_with_resource(IMAGE_RESOURCE_IDS[digit_value]);
 
   const int x_offset = (bounds.size.w - (2 * tile_bounds.size.w)) / 2;
+  const int y_offset = (bounds.size.h - (2 * tile_bounds.size.h)) / 2;
   BitmapLayer *bitmap_layer = bitmap_layer_create(
-    GRect(x_offset + ((slot_number % 2) * tile_bounds.size.w), 
-      (slot_number / 2) * tile_bounds.size.h, tile_bounds.size.w, tile_bounds.size.h));
+    GRect(x_offset + ((slot_number % 2) * tile_bounds.size.w),
+      y_offset + ((slot_number / 2) * tile_bounds.size.h),
+      tile_bounds.size.w, tile_bounds.size.h));
   s_image_layers[slot_number] = bitmap_layer;
   bitmap_layer_set_bitmap(bitmap_layer, s_images[slot_number]);
 
@@ -55,7 +57,7 @@ static void unload_digit_image_from_slot(int slot_number) {
     layer_remove_from_parent(bitmap_layer_get_layer(s_image_layers[slot_number]));
     bitmap_layer_destroy(s_image_layers[slot_number]);
     gbitmap_destroy(s_images[slot_number]);
-    
+
     // This is now an empty slot
     s_image_slot_state[slot_number] = EMPTY_SLOT;
   }
