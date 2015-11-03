@@ -28,7 +28,6 @@ static int s_image_slot_state[TOTAL_IMAGE_SLOTS] = {
   EMPTY_SLOT, EMPTY_SLOT, EMPTY_SLOT, EMPTY_SLOT
 };
 
-
 // Loads the digit image from the application's resources and
 // displays it on-screen in the correct location.
 // Each slot is a quarter of the screen.
