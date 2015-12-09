@@ -59,7 +59,7 @@ FINAL_TILE_CANVAS_DIMENSIONS = (TILE_WIDTH_PIXELS, TILE_HEIGHT_PIXELS)
 META_DATA_TEMPLATE = \
 """
         {
-        "type": "png",
+        "type": "bitmap",
         "defName": "IMAGE_NUM_%d",
         "file": "images/num_%d.png"
         }"""
