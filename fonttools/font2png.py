@@ -45,12 +45,9 @@
 
 import sys
 
-import ImageFont, ImageDraw, Image
+from PIL import ImageFont, ImageDraw, Image
 
-DEFAULT_FONT_SIZE = 100
 DEFAULT_FONT_FILE_PATH = "resources/fonts/nevis.ttf"
-
-LARGE_SCRATCH_CANVAS_DIMENSIONS = (100, 100)
 
 META_DATA_TEMPLATE = \
 """
@@ -61,7 +58,7 @@ META_DATA_TEMPLATE = \
         }"""
 
 
-def gen_bitmaps(font_size=DEFAULT_FONT_SIZE, font_file_path=DEFAULT_FONT_FILE_PATH):
+def gen_bitmaps(font_file_path=DEFAULT_FONT_FILE_PATH):
     # generate meta data
     meta_data_entries = []
     for digit in range(0, 10):
@@ -69,32 +66,42 @@ def gen_bitmaps(font_size=DEFAULT_FONT_SIZE, font_file_path=DEFAULT_FONT_FILE_PA
 
     RESOURCES_TO_GENERATE = [
         (
-            # Aplite and Basalt - 72x84 pixels (i.e. a quarter of the Aplite/Basalt display)
-            "resources/images/num_%d~rect~144.png",
+            # 140w - 72x84 pixels (i.e. a quarter of the Aplite/Basalt display)
+            "resources/images/num_%d~rect~144w.png",
             144 / 2,
-            168 / 2
+            168 / 2,
+            100,
+            100,
+            100
         ),
         (
-            # Chalk - 64x75 pixels
-            "resources/images/num_%d~round~180.png",
+            # 180w - 64x75 pixels
+            "resources/images/num_%d~round~180w.png",
             64,
-            75
+            75,
+            100,
+            100,
+            100
         ),
         (
             # 200w - 100x114 pixels
             "resources/images/num_%d~rect~200w.png",
-            100,
-            114
+            200 / 2,
+            228 / 2,
+            140,
+            140,
+            140
         )
     ]
 
-    font = ImageFont.truetype(font_file_path, font_size)
-    for output_image_filepath_template, tile_width_pixels, tile_height_pixels in RESOURCES_TO_GENERATE:
+    for output_image_filepath_template, tile_width_pixels, tile_height_pixels, font_size, scratch_width_pixels, scratch_height_pixels in RESOURCES_TO_GENERATE:
+        font = ImageFont.truetype(font_file_path, font_size)
         final_tile_canvas_dimensions = (tile_width_pixels, tile_height_pixels)
+        scratch_canvas_dimensions = (scratch_width_pixels, scratch_height_pixels)
         # Generate the image tile file for each digit.
         for digit in range(0, 10):
             # Draw the digit on a large canvas so PIL doesn't crop it.
-            scratch_canvas_image = Image.new("RGB", LARGE_SCRATCH_CANVAS_DIMENSIONS)
+            scratch_canvas_image = Image.new("RGB", scratch_canvas_dimensions)
             draw = ImageDraw.Draw(scratch_canvas_image)
 
             draw.text((0,0), str(digit), font=font)
