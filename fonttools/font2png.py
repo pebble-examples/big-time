@@ -1,3 +1,4 @@
+#!/bin/env python
 #
 # Used to create image tiles suitable for use by the "Big Watch" watch
 # face.
@@ -42,19 +43,14 @@
 # canvas of the correct size.
 #
 
+import sys
+
 import ImageFont, ImageDraw, Image
 
-FONT_SIZE = 100
-FONT_FILE_PATH = "resources/src/fonts/nevis.ttf"
-
-OUTPUT_IMAGE_FILEPATH_TEMPLATE = "resources/src/images/num_%d.png"
-
-
-TILE_WIDTH_PIXELS = 144/2
-TILE_HEIGHT_PIXELS = 168/2
+DEFAULT_FONT_SIZE = 100
+DEFAULT_FONT_FILE_PATH = "resources/fonts/nevis.ttf"
 
 LARGE_SCRATCH_CANVAS_DIMENSIONS = (100, 100)
-FINAL_TILE_CANVAS_DIMENSIONS = (TILE_WIDTH_PIXELS, TILE_HEIGHT_PIXELS)
 
 META_DATA_TEMPLATE = \
 """
@@ -65,38 +61,68 @@ META_DATA_TEMPLATE = \
         }"""
 
 
-meta_data_entries = []
-
-font = ImageFont.truetype(FONT_FILE_PATH, FONT_SIZE)
-
-
-if __name__ == "__main__":
-    # Generate the image tile file for each digit.
+def gen_bitmaps(font_size=DEFAULT_FONT_SIZE, font_file_path=DEFAULT_FONT_FILE_PATH):
+    # generate meta data
+    meta_data_entries = []
     for digit in range(0, 10):
-        # Draw the digit on a large canvas so PIL doesn't crop it.
-        scratch_canvas_image = Image.new("RGB", LARGE_SCRATCH_CANVAS_DIMENSIONS)
-        draw = ImageDraw.Draw(scratch_canvas_image)
-
-        draw.text((0,0), str(digit), font=font)
-
-        # Discard all the padding
-        cropped_digit_image = scratch_canvas_image.crop(scratch_canvas_image.getbbox())
-
-        # Center the digit within the final image tile and save it
-        digit_width, digit_height = cropped_digit_image.size
-
-        tile_image = Image.new("RGB", FINAL_TILE_CANVAS_DIMENSIONS)
-
-        tile_image.paste(cropped_digit_image, ((TILE_WIDTH_PIXELS-digit_width)/2, (TILE_HEIGHT_PIXELS-digit_height)/2))
-
-        tile_image.save(OUTPUT_IMAGE_FILEPATH_TEMPLATE % digit)
-
         meta_data_entries.append(META_DATA_TEMPLATE % (digit, digit))
+
+    RESOURCES_TO_GENERATE = [
+        (
+            # Aplite and Basalt - 72x84 pixels (i.e. a quarter of the Aplite/Basalt display)
+            "resources/images/num_%d~rect~144.png",
+            144 / 2,
+            168 / 2
+        ),
+        (
+            # Chalk - 64x75 pixels
+            "resources/images/num_%d~round~180.png",
+            64,
+            75
+        ),
+        (
+            # 200w - 100x114 pixels
+            "resources/images/num_%d~rect~200w.png",
+            100,
+            114
+        )
+    ]
+
+    font = ImageFont.truetype(font_file_path, font_size)
+    for output_image_filepath_template, tile_width_pixels, tile_height_pixels in RESOURCES_TO_GENERATE:
+        final_tile_canvas_dimensions = (tile_width_pixels, tile_height_pixels)
+        # Generate the image tile file for each digit.
+        for digit in range(0, 10):
+            # Draw the digit on a large canvas so PIL doesn't crop it.
+            scratch_canvas_image = Image.new("RGB", LARGE_SCRATCH_CANVAS_DIMENSIONS)
+            draw = ImageDraw.Draw(scratch_canvas_image)
+
+            draw.text((0,0), str(digit), font=font)
+
+            # Discard all the padding
+            cropped_digit_image = scratch_canvas_image.crop(scratch_canvas_image.getbbox())
+
+            # Center the digit within the final image tile and save it
+            digit_width, digit_height = cropped_digit_image.size
+
+            tile_image = Image.new("RGB", final_tile_canvas_dimensions)
+
+            tile_image.paste(cropped_digit_image, ((tile_width_pixels-digit_width)/2, (tile_height_pixels-digit_height)/2))
+
+            tile_image.save(output_image_filepath_template % digit)
 
 
     # Display the meta data which needs to be included in `resource_map.json`.
     print ",\n".join(meta_data_entries)
 
+def main(argv=None):
+    if argv is None:
+        argv = sys.argv
+
+    gen_bitmaps()
+
+    return 0
 
 
-
+if __name__ == "__main__":
+    sys.exit(main())
