@@ -1,0 +1,91 @@
+{
+  "version": "6.0.0",
+  "author": "Pebble Technology",
+  "private": true,
+  "dependencies": {},
+  "keywords": [
+    "pebble-app"
+  ],
+  "pebble": {
+    "sdkVersion": "3",
+    "resources": {
+      "media": [
+        {
+          "menuIcon": true,
+          "type": "bitmap",
+          "name": "IMAGE_MENU_ICON",
+          "file": "images/menu_icon_big_watch.png"
+        },
+        {
+          "type": "bitmap",
+          "name": "IMAGE_NUM_0",
+          "file": "images/num_0.png"
+        },
+        {
+          "type": "bitmap",
+          "name": "IMAGE_NUM_1",
+          "file": "images/num_1.png"
+        },
+        {
+          "type": "bitmap",
+          "name": "IMAGE_NUM_2",
+          "file": "images/num_2.png"
+        },
+        {
+          "type": "bitmap",
+          "name": "IMAGE_NUM_3",
+          "file": "images/num_3.png"
+        },
+        {
+          "type": "bitmap",
+          "name": "IMAGE_NUM_4",
+          "file": "images/num_4.png"
+        },
+        {
+          "type": "bitmap",
+          "name": "IMAGE_NUM_5",
+          "file": "images/num_5.png"
+        },
+        {
+          "type": "bitmap",
+          "name": "IMAGE_NUM_6",
+          "file": "images/num_6.png"
+        },
+        {
+          "type": "bitmap",
+          "name": "IMAGE_NUM_7",
+          "file": "images/num_7.png"
+        },
+        {
+          "type": "bitmap",
+          "name": "IMAGE_NUM_8",
+          "file": "images/num_8.png"
+        },
+        {
+          "type": "bitmap",
+          "name": "IMAGE_NUM_9",
+          "file": "images/num_9.png"
+        }
+      ]
+    },
+    "projectType": "native",
+    "uuid": "afcc6876-8f84-44e0-bb8b-023ffb2d7c2c",
+    "messageKeys": {},
+    "enableMultiJS": false,
+    "displayName": "Big Time",
+    "watchapp": {
+      "onlyShownOnCommunication": false,
+      "hiddenApp": false,
+      "watchface": true
+    },
+    "targetPlatforms": [
+      "aplite",
+      "basalt",
+      "chalk",
+      "diorite",
+      "emery"
+    ],
+    "capabilities": []
+  },
+  "name": "Big Time"
+}
